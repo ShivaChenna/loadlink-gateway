@@ -1,0 +1,40 @@
+# ASP.NET Core
+# Build and test ASP.NET Core projects targeting .NET Core.
+# Add steps that run tests, create a NuGet package, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+trigger:
+- qa
+
+pool:
+  name: Default
+  vmImage: 'ubuntu-latest'
+
+variables:
+  ImageTag: 'registry.loadlink.ca/linktmsapigateway-qa:$(Build.BuildId)'
+  RegistryServer: 'registry.loadlink.ca'
+  ContainerRegistry: 'Loadlink-Registry'
+  Repository: 'linktmsapigateway-qa'
+
+steps:
+- task: Docker@2
+  displayName: 'Build an Image'
+  inputs:
+    containerRegistry: $(ContainerRegistry)
+    repository: $(Repository)
+    command: build
+    arguments: '--rm'
+    dockerfile: Dockerfile
+    tags: |
+        $(Build.BuildId)
+
+- bash: |
+   displayName: 'Bash Script'
+   echo "Logging into the registry"
+   
+   docker login $(RegistryServer) -u devops -p MyP@ssw0rd
+   
+   echo "Pushing image"
+   echo $(ImageTag)
+   
+   docker push $(ImageTag)

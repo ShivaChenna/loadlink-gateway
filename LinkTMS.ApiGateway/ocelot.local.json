@@ -1,0 +1,51 @@
+{
+  "AllowedHosts": "*",
+  "Routes": [
+    // Load Api
+    {
+      "DownstreamPathTemplate": "/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5186
+        }
+      ],
+      "UpstreamPathTemplate": "/load/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS" ],
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      },
+      "AuthenticationOptions": {
+        //"AuthenticationProviderKey": "IdentityApiKeyLinkup",
+        "AllowedScopes": [ "linkup", "linkup.full_access" ]
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7256
+        }
+      ],
+      "UpstreamPathTemplate": "/core/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS" ],
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      },
+      "AuthenticationOptions": {
+        //"AuthenticationProviderKey": "IdentityApiKeyLinkup",
+        "AllowedScopes": [ "linkup", "linkup.full_access" ]
+      }
+    }
+  ],
+
+  //************** END of downstream and upstream host and port setup **************//
+
+
+  "GlobalConfiguration": {
+    "BaseUrl": "http://localhost:5088"
+  }
+}

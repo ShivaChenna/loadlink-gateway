@@ -1,0 +1,51 @@
+{
+  "AllowedHosts": "*",
+  "Routes": [
+    // Load Api
+    {
+      "DownstreamPathTemplate": "/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "10.50.7.71",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/load/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS" ],
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      },
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "IdentityApiKeyLinkup",
+        "AllowedScopes": [ "linkup.full_access" ]
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "10.50.7.67",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/core/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS" ],
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      },
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "IdentityApiKeyLinkup",
+        "AllowedScopes": [ "linkup.full_access" ]
+      }
+    }
+  ],
+
+  //************** END of downstream and upstream host and port setup **************//
+
+
+  "GlobalConfiguration": {
+    "BaseUrl": "https://devapigateway.linkdispatch.ca"
+  }
+}
